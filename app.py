@@ -18,8 +18,12 @@ def upload_file():
     if request.method == 'POST':
         f = request.files['file']
         f.save('static/images/' + secure_filename('original.png'))
-        test.run()
         return '파일 업로드 성공!'
+
+@app.route('/intUpload/<int:post_id>')
+def upload_int(post_id):
+    test.run(post_id)
+    return '차종 받기 완료!'
 
 @app.route('/image_0') 
 def image_0():
