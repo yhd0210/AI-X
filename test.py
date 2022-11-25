@@ -9,7 +9,7 @@ matplotlib.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.rcParams['font.size'] = 15
 matplotlib.rcParams['axes.unicode_minus'] = False
 
-def run():
+def run(n):
     labels = ['긁힌 영역', '이격된 영역', '찌그러진 영역', '파손된 영역']
     models = []
 
@@ -17,7 +17,7 @@ def run():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     for label in labels:
-        model_path = f'models/[DAMAGE][{label}]Unet.pt'
+        model_path = f'models/[{label}]Unet.pt'
 
         model = Unet(encoder='resnet34', pre_weight='imagenet', num_classes=n_classes).to(device)
         model.model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
@@ -50,7 +50,7 @@ def run():
         outputs.append(img_output)
 
         plt.imshow(img.astype('uint8'), alpha=0.5)
-        plt.imshow(img_output, cmap='terrain', alpha=0.5)
+        plt.imshow(img_output, cmap='jet', alpha=0.5)
         plt.gca().axes.xaxis.set_visible(False)
         plt.gca().axes.yaxis.set_visible(False)
         plt.savefig(f'static/images/{i}_image.png', transparent = True, bbox_inches = 'tight', pad_inches = 0)
@@ -63,6 +63,19 @@ def run():
         200, # 파손
     ]
 
+    line = n
+    if line == 0:
+        for i in range(4):
+            price_table[i] -= 20
+    elif line == 1:
+        for i in range(4):
+            price_table[i] -= 10
+    elif line == 2:
+        pass
+    elif line == 3:
+        for i in range(4):
+            price_table[i] += 20
+    
     total = 0
     total_price = 0
 
